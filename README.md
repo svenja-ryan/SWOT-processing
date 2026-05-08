@@ -90,6 +90,7 @@ This notebook guides you through:
 ### Step 4: Postprocess Science Data
 
 Use `science_postprocess_region.py` to process downloaded SWOT Science-phase files for your selected region.
+**Note**: the script sets up a large local dask cluster for faster processing. Check resources and comment code in the script if you don't want to use it. 
 
 This script:
 - reads the region pass ID list created in Step 2
