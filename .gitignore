@@ -1,0 +1,16 @@
+# ignore data files
+*.csv
+*.zip
+*.npy
+
+.ipynb_checkpoints
+__pycache__/
+
+
+# ignore image files
+*.jpg
+*.jpeg
+*.png
+*.gif
+*.bmp
+*.svg
