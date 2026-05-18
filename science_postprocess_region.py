@@ -190,7 +190,7 @@ def swot_add_diag(ds, n=9):
         kernel='circular',
     )
 
-    dummy_unfilt = compute_ocean_diagnostics_from_eta(ds.adt_unfiltered, ds.longitude, ds.latitude, **params)
+    dummy_unfilt = compute_ocean_diagnostics_from_eta(ds.adt_unfiltered, ds.longitude, ds.latitude, **params) # from diag package
     dummy_filt = compute_ocean_diagnostics_from_eta(ds.adt_filtered, ds.longitude, ds.latitude, **params)
 
     ds = ds.assign(
@@ -213,18 +213,22 @@ def process_swot_file(f, latmin, latmax, n_zeta=9, nlines_max=1029):
             ['dac', 'calibration', 'ocean_tide', 'cross_track_distance', 'internal_tide', 'sigma0']
         )
 
+        # limit to lat range to reduce file size and speed up processing
         dummy = dummy.where((dummy.latitude > latmin) & (dummy.latitude < latmax), drop=True)
 
+        # derive ADT and speed
         dummy["adt_filtered"] = dummy["mdt"] + dummy["ssha_filtered"]
         dummy["adt_unfiltered"] = dummy["mdt"] + dummy["ssha_unfiltered"]
         dummy["speed_filtered"] = np.sqrt(dummy["ugos_filtered"]**2 + dummy["vgos_filtered"]**2)
 
+        # compute vorticity and cyclogeostrophic velocities using SwotDiag package  
         dummy = swot_add_diag(dummy, n=n_zeta)
 
+        #
         drop_vars = [v for v in ["i_num_pixel", "i_num_line"] if v in dummy.variables]
         if drop_vars:
             dummy = dummy.drop_vars(drop_vars)
-
+        # trim to common num_lines length so all files can be concatenated
         if dummy.sizes["num_lines"] > nlines_max:
             dummy = dummy.isel(num_lines=slice(0, nlines_max))
 

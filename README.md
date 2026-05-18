@@ -68,9 +68,9 @@ These notebooks/scripts help you:
 - search for SWOT passes in a target region
 - build pass ID lists for later processing (saved as txt file)
 
-### Step 3: Download SWOT Science Data
+### Step 3: Download SWOT Data
 
-Use the interactive notebook to download the selected SWOT science files once you have the pass IDs and region defined in Step 2.
+Use the interactive notebook to download the selected SWOT science files once you have the pass IDs and region defined in Step 2. For CalVal phase use other tools and define passes and cycles explicitly. 
 
 - Open `aviso_download_swot_interactive.ipynb`
 - follow the notebook cells to configure AVISO FTP credentials, target region, and file types
