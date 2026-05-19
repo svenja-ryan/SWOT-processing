@@ -89,18 +89,18 @@ This notebook guides you through:
 
 ### Step 4: Postprocess Science Data
 
-Use `science_postprocess_region.py` to process downloaded SWOT Science-phase files for your selected region.
+Use `science_postprocess_region.py` to process downloaded SWOT Science-phase files for your selected region.  
 **Note**: the script sets up a large local dask cluster for faster processing. Check resources and comment code in the script if you don't want to use it. 
 
 This script:
 - reads the region pass ID list created in Step 2
 - finds matching downloaded SWOT science NetCDF files
 - subsets each file by latitude and region (to reduce data size)
-- computes derived fields: filtered/unfiltered ADT, geostrophic speed, vorticity, and cyclogeostrophic velocity components
+- computes derived fields: filtered/unfiltered ADT, geostrophic speed, vorticity, and cyclogeostrophic velocity components using SWOTdiag package by Tranchant et al.
 - trims passes to a common line count for concatenation
 - concatenates selected passes for each cycle
 - writes one merged NetCDF file per cycle for downstream analysis
 
-A separate Cal/Val postprocessing script will be added later.
+**Run** Execute script in command line for it to run on the background. Adding the diagnostics takes a while. You can comment the respective code if you don't need it then the script should run well without the dask cluster. 
 
 
