@@ -101,6 +101,34 @@ This script:
 - concatenates selected passes for each cycle
 - writes one merged NetCDF file per cycle for downstream analysis
 
-**Run** Execute script in command line for it to run on the background. Adding the diagnostics takes a while. You can comment the respective code if you don't need it then the script should run well without the dask cluster. 
+**To Run:** Execute script in command line for it to run in the background. Adding the diagnostics takes a while. You can comment the respective code if you don't need it, and the script should run well without the Dask cluster.
+
+### Step 5: Postprocess CalVal Data
+
+Use `CalVal_postprocess_region.py` to process SWOT CalVal files for the calibration/validation phase.
+
+This script:
+- loads CalVal pass files from the specified `--filepath`
+- concatenates pass records along a new `cycle` dimension
+- derives `adt_filtered`, `adt_unfiltered`, and `speed_filtered`
+- standardizes `time_cycle` coordinates and trims by latitude bounds
+- add diagnostics using SWOTDiag package in parallel across individual `time_cycle` slices using Dask
+
+**Comand line example**:
+```bash
+python CalVal_postprocess_region.py \
+  --filepath /srv/data/SWOT/L3/CalVal/v3_0/ \
+  --passes 9 22 \
+  --lat-min 30 --lat-max 55 \
+  --cycle-start 474 --cycle-end 577 \
+  --n-workers 10 --threads-per-worker 6 --memory-limit 20GB
+```
+Alternatively, you can modify the variables at the top of the script and execute it without parsing arguments. 
+
+
+Use `--dashboard-address :8787` if you want the Dask dashboard enabled. Then you can see dashboard under http://10.128.43.2:8787/status
+
+
+
 
 
