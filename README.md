@@ -6,13 +6,19 @@ Repository to share preprocessing and analysis code for use of SWOT data.
 
 ### Python Scripts
 
-**[startup_swot.py](startup_swot.py)** — Initialization script that loads common libraries (numpy, xarray, matplotlib, cartopy, gsw) and sets up the working environment for SWOT projects.
-
 **[science_postprocess_region.py](science_postprocess_region.py)** — Main processing pipeline for SWOT L3 Science-phase Expert data that:
-- Reads region-specific pass IDs
-- Finds and subsets matching SWOT NetCDF files by latitude
-- Computes derived fields (filtered/unfiltered ADT, geostrophic speed, vorticity, cyclogeostrophic velocity)
-- Concatenates passes per cycle into merged files
+- reads region-specific pass IDs
+- finds and subsets matching SWOT NetCDF files by latitude
+- computes derived fields (filtered/unfiltered ADT, geostrophic speed, vorticity, cyclogeostrophic velocity)
+- concatenates passes per cycle into merged files and saves one file per cycle
+
+**[CalVal_postprocess_region.py](CalVal_postprocess_region.py)** — CalVal-phase processing pipeline for SWOT pass files that:
+- loads and processes individual CalVal pass files
+- derives filtered/unfiltered ADT and speed
+- optionally adds SWOT diagnostics
+- merges processed pass datasets into a single output file
+
+**[find_swot_passes_science_Jinbo.py](find_swot_passes_science_Jinbo.py)** — Original script for finding SWOT science-phase pass IDs using regional selection criteria
 
 ### Jupyter Notebooks
 (<small>adapted from from https://github.com/SWOT-community/SWOT-Oceanography</small>)
@@ -126,16 +132,8 @@ python python/utils/SWOT/CalVal_postprocess_region.py \
   --n-workers 10 --threads-per-worker 6 --memory-limit 20GB
 ```
 
-To skip diagnostics and only perform file-level ADT/speed processing, use:
-```bash
-python python/utils/SWOT/CalVal_postprocess_region.py \
-  --filepath /srv/data/SWOT/L3/CalVal/v3_0/ \
-  --passnumber 9 \
-  --lat-min 30 --lat-max 55 \
-  --cycle-start 474 --cycle-end 577 \
-  --no-add-diag \
-  --n-workers 10 --threads-per-worker 6 --memory-limit 20GB
-```
+To skip diagnostics and only perform file-level ADT/speed processing, use `--no-add-diag` argument. 
+
 
 **Interactive usage**:
 - open the script in a Python session or notebook
