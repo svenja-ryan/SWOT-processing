@@ -109,24 +109,41 @@ Use `CalVal_postprocess_region.py` to process SWOT CalVal files for the calibrat
 
 This script:
 - loads CalVal pass files from the specified `--filepath`
-- concatenates pass records along a new `cycle` dimension
+- processes each file separately for better Dask parallelism
 - derives `adt_filtered`, `adt_unfiltered`, and `speed_filtered`
+- optionally adds SWOT diagnostics with `--add-diag`
 - standardizes `time_cycle` coordinates and trims by latitude bounds
-- add diagnostics using SWOTDiag package in parallel across individual `time_cycle` slices using Dask
+- concatenates processed files into a merged output dataset
 
-**Comand line example**:
+**Command line example**:
 ```bash
-python CalVal_postprocess_region.py \
+python python/utils/SWOT/CalVal_postprocess_region.py \
   --filepath /srv/data/SWOT/L3/CalVal/v3_0/ \
-  --passes 9 22 \
+  --passnumber 9 \
   --lat-min 30 --lat-max 55 \
   --cycle-start 474 --cycle-end 577 \
+  --add-diag \
   --n-workers 10 --threads-per-worker 6 --memory-limit 20GB
 ```
-Alternatively, you can modify the variables at the top of the script and execute it without parsing arguments. 
 
+To skip diagnostics and only perform file-level ADT/speed processing, use:
+```bash
+python python/utils/SWOT/CalVal_postprocess_region.py \
+  --filepath /srv/data/SWOT/L3/CalVal/v3_0/ \
+  --passnumber 9 \
+  --lat-min 30 --lat-max 55 \
+  --cycle-start 474 --cycle-end 577 \
+  --no-add-diag \
+  --n-workers 10 --threads-per-worker 6 --memory-limit 20GB
+```
 
-Use `--dashboard-address :8787` if you want the Dask dashboard enabled. Then you can see dashboard under http://10.128.43.2:8787/status
+**Interactive usage**:
+- open the script in a Python session or notebook
+- make sure the script uses `args = parser.parse_args([])` for notebook testing
+- then call `main()` directly from the notebook
+- optionally edit the top-of-file defaults before running
+
+Use `--dashboard-address :8787` if you want the Dask dashboard enabled. Then you can see the dashboard under the configured host URL, e.g. `http://localhost:8787/status` if you run locally.
 
 
 
