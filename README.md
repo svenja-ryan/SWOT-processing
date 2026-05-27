@@ -78,7 +78,7 @@ These notebooks/scripts help you:
 
 Use the interactive notebook to download the selected SWOT science files once you have the pass IDs and region defined in Step 2. For CalVal phase use other tools and define passes and cycles explicitly. 
 
-- Open `aviso_download_swot_interactive.ipynb`
+- Open `aviso_download_swot_notebook.ipynb`
 - follow the notebook cells to configure AVISO FTP credentials, target region, and file types
 - ensure it reads the pass ID list for your region created in Step 2
 - execute the download steps to retrieve the required data files
